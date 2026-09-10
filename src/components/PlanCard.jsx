@@ -17,25 +17,54 @@ export default function PlanCard({ plan }) {
   };
 
   return (
-    <main>
-      <h1>Milo</h1>
-      <p>Find people. Make Plans.</p>
+  <article className="plan-card">
+    <div className="flex items-center justify-between gap-3">
+      <span className="badge">Make a plan</span>
 
-      <h2>{plan.title}</h2>
-      <p>{plan.location}</p>
-      <p>{spotLeft} spots left!</p>
-      <button disabled={spotLeft === 0 || hasJoined} onClick={handleJoin}>
-        {spotLeft === 0 ? "Full" : "Join plan"}
+      <span className="text-xs font-medium text-muted">
+        {confirmedPlayers}/{plan.capacity} joined
+      </span>
+    </div>
+
+    <div>
+      <h2 className="plan-title">{plan.title}</h2>
+
+      <p className="plan-location mt-2">
+        <span className="font-medium">Location:</span> {plan.location}
+      </p>
+    </div>
+
+    <div className="rounded-control bg-page px-4 py-3">
+      <p className="plan-spots">
+        {spotLeft === 0
+          ? "This plan is full"
+          : `${spotLeft} ${spotLeft === 1 ? "spot" : "spots"} available`}
+      </p>
+
+      <p className="mt-1 text-sm text-muted">
+        {hasJoined
+          ? "You're in! Your place is reserved."
+          : "Join the plan and meet your next crew."}
+      </p>
+    </div>
+
+    <div className="card-actions">
+      <button
+        className="btn-primary flex-1"
+        onClick={handleJoin}
+        disabled={spotLeft === 0 || hasJoined}
+      >
+        {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "Join plan"}
       </button>
 
       <button
+        className="btn-secondary"
         onClick={handleLeave}
-        disabled={spotLeft === plan.capacity || !hasJoined}
+        disabled={!hasJoined}
       >
-        Leave Plan
+        Leave
       </button>
-
-      <h1>Am I in? {hasJoined ? "Yes" : "No"}</h1>
-    </main>
-  );
+    </div>
+  </article>
+);
 }
