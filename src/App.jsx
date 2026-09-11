@@ -3,21 +3,70 @@ import PlanCard from "./components/PlanCard";
 import "./App.css";
 
 function App() {
-  let plans = [
+  const [plans, setPlans] = useState([
     {
       id: 1,
       title: "Evening Badminton",
       location: "Etobicoke",
       capacity: 4,
+      category: "sport",
+      confirmedPlayers: 2,
+      hasJoined: false,
     },
     {
       id: 2,
       title: "Coffee",
       location: "Toronto",
       capacity: 2,
+      category: "social",
+      confirmedPlayers: 2,
+      hasJoined: false,
     },
-  ];
+  ]);
 
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const filteredPlans = plans.filter((plan) => {
+    if (selectedCategory === "all") {
+      return true;
+    }
+
+    return plan.category === selectedCategory;
+  });
+
+  function handleJoin(planid) {
+    setPlans((prevPlan) => {
+      return prevPlan.map((plan) => {
+        if (plan.id !== planid) {
+          return plan;
+        }
+
+        if (plan.hasJoined || plan.confirmedPlayers >= plan.capacity) {
+          return plan;
+        }
+        return {
+          ...plan,
+          confirmedPlayers: plan.confirmedPlayers + 1,
+          hasJoined: true,
+        };
+      });
+    });
+  }
+
+  function handleLeave(planid) {
+    setPlans((prevPlan) => {
+      return prevPlan.map((plan) => {
+        if (plan.id !== planid) {
+          return plan;
+        }
+
+        return {
+          ...plan,
+          confirmedPlayers: plan.confirmedPlayers - 1,
+          hasJoined: false,
+        };
+      });
+    });
+  }
   return (
     <main className="app-shell">
       <header className="app-header">
@@ -52,10 +101,30 @@ function App() {
           </p>
         </div>
 
+        <div className="mb-6 flex flex-wrap gap-2">
+          {["all", "sport", "social"].map((item) => {
+            return (
+              <button
+                key={item}
+                onClick={() => setSelectedCategory(item)}
+                className={
+                  selectedCategory === item ? "btn-primary" : "btn-secondary"
+                }
+              >
+                {item.toUpperCase()}
+              </button>
+            );
+          })}
+        </div>
 
         <div className="plans-grid">
-          {plans.map((plan) => (
-            <PlanCard plan={plan} key={plan.id} />
+          {filteredPlans.map((plan) => (
+            <PlanCard
+              key={plan.id}
+              plan={plan}
+              handleLeave={handleLeave}
+              handleJoin={handleJoin}
+            />
           ))}
         </div>
       </section>
