@@ -4,6 +4,8 @@ import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import { Route, Routes } from "react-router";
 import { useState } from "react";
+import CreatePlanForm from "./features/plans/components/CreatePlanForm";
+
 
 export default function App() {
   const [plans, setPlans] = useState([
@@ -63,6 +65,18 @@ export default function App() {
     });
   }
 
+  function handleAddPlan(planObj) {
+    const fakeDBResponse = {
+      ...planObj,
+      id: Date.now(),
+      confirmedPlayers : 1,
+      hasJoined : false
+    }
+    setPlans([
+      ...plans,
+      fakeDBResponse
+    ])
+  }
   return (
     <AppLayout>
       <Routes>
@@ -77,6 +91,7 @@ export default function App() {
             />
           }
         />
+        <Route path="/create" element={<CreatePlanForm handleAddPlan={handleAddPlan}/>} />
       </Routes>
     </AppLayout>
   );
