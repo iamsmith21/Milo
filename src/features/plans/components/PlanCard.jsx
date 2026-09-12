@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function PlanCard({ plan, handleJoin, handleLeave }) {
   const { confirmedPlayers, hasJoined } = plan;
   const spotLeft = plan.capacity - confirmedPlayers;
