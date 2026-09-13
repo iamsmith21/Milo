@@ -1,12 +1,31 @@
 import { Link, useParams } from "react-router";
 import { usePlans } from "../context/PlansContext";
+import { useQuery } from "@tanstack/react-query";
 
 export default function PlanDetailPage() {
   const { id } = useParams();
 
-  const { plans } = usePlans();
+  // const { plans } = usePlans();
+  const {
+    data: plan,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["plan", id],
 
-  const plan = plans.find((p) => String(p.id) === String(id));
+    queryFn: async () => {
+      const response = await fetch(`http://localhost:3000/api/plans/${id}`);
+      if (!response.ok) throw new Error("Failed to fetch plan");
+      return response.json();
+    },
+  });
+
+  if (isLoading)
+    return <div className="py-20 text-center">Loading details...</div>;
+  if (isError)
+    return (
+      <div className="py-20 text-center text-red-500">Plan not found!</div>
+    );
 
   if (!plan) {
     return (

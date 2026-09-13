@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { usePlans } from "../../../context/PlansContext";
+import { useNavigate } from "react-router";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function CreatePlanForm() {
   const { handleAddPlan } = usePlans();
@@ -10,6 +12,7 @@ export default function CreatePlanForm() {
     category: "social",
   });
 
+  const navigate = useNavigate();
   function handleChange(e) {
     const { name, value } = e.target;
 
@@ -19,10 +22,45 @@ export default function CreatePlanForm() {
     }));
   }
 
+  const queryClient = useQueryClient();
+
+  const createPlanMutation = useMutation({
+    mutationFn: async (newPlanData) => {
+      const response = await fetch("http://localhost:3000/api/plans", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPlanData),
+      });
+
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
+      navigate("/explore");
+    },
+  });
+
   function handleSubmit(e) {
-    handleAddPlan(formData);
     e.preventDefault();
+
+    createPlanMutation.mutate(formData);
   }
+  // function handleSubmit(e) {
+  //   fetch("http://localhost:3000/api/plans", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(formData),
+  //   })
+  //     .then((response) => response.json())
+  //     .then(() => {
+  //       navigate("/explore");
+  //     });
+  //   e.preventDefault();
+  // }
 
   console.log("Submitting this data", formData);
 

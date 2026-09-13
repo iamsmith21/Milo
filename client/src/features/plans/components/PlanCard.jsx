@@ -5,8 +5,8 @@ export default function PlanCard({ plan, handleJoin, handleLeave }) {
   const spotLeft = plan.capacity - confirmedPlayers;
 
   return (
-    <Link to={`/plan/${plan.id}`} className="block">
-      <article className="plan-card">
+    <article className="plan-card">
+      <Link to={`/plan/${plan.id}`} className="block">
         <div className="flex items-center justify-between gap-3">
           <span className="badge">Make a plan</span>
 
@@ -36,25 +36,24 @@ export default function PlanCard({ plan, handleJoin, handleLeave }) {
               : "Join the plan and meet your next crew."}
           </p>
         </div>
+      </Link>
+      <div className="card-actions">
+        <button
+          className="btn-primary flex-1"
+          onClick={() => handleJoin(plan.id)}
+          disabled={spotLeft === 0 || hasJoined}
+        >
+          {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "Join plan"}
+        </button>
 
-        <div className="card-actions">
-          <button
-            className="btn-primary flex-1"
-            onClick={() => handleJoin(plan.id)}
-            disabled={spotLeft === 0 || hasJoined}
-          >
-            {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "Join plan"}
-          </button>
-
-          <button
-            className="btn-secondary"
-            onClick={() => handleLeave(plan.id)}
-            disabled={!hasJoined}
-          >
-            Leave
-          </button>
-        </div>
-      </article>
-    </Link>
+        <button
+          className="btn-secondary"
+          onClick={() => handleLeave(plan.id)}
+          disabled={!hasJoined}
+        >
+          Leave
+        </button>
+      </div>
+    </article>
   );
 }
