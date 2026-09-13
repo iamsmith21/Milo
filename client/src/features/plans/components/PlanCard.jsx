@@ -1,6 +1,50 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 
-export default function PlanCard({ plan, handleJoin, handleLeave }) {
+export default function PlanCard({ plan }) {
+  const queryClient = useQueryClient();
+
+  const joinMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(
+        `http://localhost:3000/api/plans/${plan.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            hasJoined: true,
+            confirmedPlayers: plan.confirmedPlayers + 1,
+          }),
+        },
+      );
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
+    },
+  });
+
+  const leaveMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`http://localhost:3000/api/plans/${plan.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          hasJoined: false,
+          confirmedPlayers: plan.confirmedPlayers - 1,
+        }),
+      });
+
+      return res;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
+    },
+  });
+
   const { confirmedPlayers, hasJoined } = plan;
   const spotLeft = plan.capacity - confirmedPlayers;
 
@@ -40,7 +84,7 @@ export default function PlanCard({ plan, handleJoin, handleLeave }) {
       <div className="card-actions">
         <button
           className="btn-primary flex-1"
-          onClick={() => handleJoin(plan.id)}
+          onClick={() => joinMutation.mutate()}
           disabled={spotLeft === 0 || hasJoined}
         >
           {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "Join plan"}
@@ -48,7 +92,7 @@ export default function PlanCard({ plan, handleJoin, handleLeave }) {
 
         <button
           className="btn-secondary"
-          onClick={() => handleLeave(plan.id)}
+          onClick={() => leaveMutation.mutate()}
           disabled={!hasJoined}
         >
           Leave

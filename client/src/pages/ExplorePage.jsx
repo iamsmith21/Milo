@@ -2,11 +2,9 @@ import { useState } from "react";
 import CategoryFilter from "../features/plans/components/CategoryFilter";
 import PlanList from "../features/plans/components/PlanList";
 import { useQuery } from "@tanstack/react-query";
-import { usePlans } from "../context/PlansContext";
 
 function ExplorePage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const { handleJoin, handleLeave } = usePlans();
   const [searchQ, setSearchQ] = useState("");
 
   const {
@@ -75,17 +73,12 @@ function ExplorePage() {
           onChange={(e) => setSearchQ(e.target.value)}
         />
 
-        <p>You types: {searchQ}</p>
         <CategoryFilter
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
         />
 
-        <PlanList
-          plans={filteredPlans}
-          onJoin={handleJoin}
-          onLeave={handleLeave}
-        />
+        <PlanList plans={filteredPlans} />
       </section>
     </>
   );

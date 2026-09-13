@@ -1,6 +1,6 @@
 import PlanCard from "./PlanCard";
 
-export default function PlanList({ plans, onJoin, onLeave }) {
+export default function PlanList({ plans }) {
   return (
     <div className="plans-grid">
       {plans.length > 0 ? (
@@ -8,8 +8,6 @@ export default function PlanList({ plans, onJoin, onLeave }) {
           <PlanCard
             key={plan.id}
             plan={plan}
-            handleJoin={onJoin}
-            handleLeave={onLeave}
           />
         ))
       ) : (
