@@ -1,8 +1,12 @@
 import { useState } from "react";
 import CategoryFilter from "../features/plans/components/CategoryFilter";
 import PlanList from "../features/plans/components/PlanList";
+import { usePlans } from "../context/PlansContext";
 
-function ExplorePage({ plans, handleJoin, handleLeave }) {
+
+function ExplorePage() {
+
+  const { plans, handleJoin, handleLeave } = usePlans()
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const [searchQ, setSearchQ] = useState("");

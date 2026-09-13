@@ -3,80 +3,11 @@ import ExplorePage from "./pages/ExplorePage";
 import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import { Route, Routes } from "react-router";
-import { useState } from "react";
 import CreatePlanForm from "./features/plans/components/CreatePlanForm";
+import PlanDetailPage from "./pages/PlanDetailpage";
 
 
 export default function App() {
-  const [plans, setPlans] = useState([
-    {
-      id: 1,
-      title: "Evening Badminton",
-      location: "Etobicoke",
-      capacity: 4,
-      category: "sport",
-      confirmedPlayers: 2,
-      hasJoined: false,
-    },
-    {
-      id: 2,
-      title: "Coffee",
-      location: "Toronto",
-      capacity: 2,
-      category: "social",
-      confirmedPlayers: 2,
-      hasJoined: false,
-    },
-  ]);
-  function handleJoin(planid) {
-    setPlans((prevPlan) => {
-      return prevPlan.map((plan) => {
-        if (plan.id !== planid) {
-          return plan;
-        }
-
-        if (plan.hasJoined || plan.confirmedPlayers >= plan.capacity) {
-          return plan;
-        }
-        return {
-          ...plan,
-          confirmedPlayers: plan.confirmedPlayers + 1,
-          hasJoined: true,
-        };
-      });
-    });
-  }
-
-  function handleLeave(planid) {
-    setPlans((prevPlan) => {
-      return prevPlan.map((plan) => {
-        if (plan.id !== planid) {
-          return plan;
-        }
-
-        if (!plan.hasJoined) return plan;
-
-        return {
-          ...plan,
-          confirmedPlayers: plan.confirmedPlayers - 1,
-          hasJoined: false,
-        };
-      });
-    });
-  }
-
-  function handleAddPlan(planObj) {
-    const fakeDBResponse = {
-      ...planObj,
-      id: Date.now(),
-      confirmedPlayers : 1,
-      hasJoined : false
-    }
-    setPlans([
-      ...plans,
-      fakeDBResponse
-    ])
-  }
   return (
     <AppLayout>
       <Routes>
@@ -85,13 +16,11 @@ export default function App() {
           path="/explore"
           element={
             <ExplorePage
-              plans={plans}
-              handleJoin={handleJoin}
-              handleLeave={handleLeave}
             />
           }
         />
-        <Route path="/create" element={<CreatePlanForm handleAddPlan={handleAddPlan}/>} />
+        <Route path="/create" element={<CreatePlanForm/>} />
+        <Route path="/plan/:id" element={<PlanDetailPage />} />
       </Routes>
     </AppLayout>
   );
