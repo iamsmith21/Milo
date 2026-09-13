@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { usePlans } from "../../../context/PlansContext";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function CreatePlanForm() {
-  const { handleAddPlan } = usePlans();
   const [formData, setFormData] = useState({
     title: "",
     location: "",

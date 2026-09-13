@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CategoryFilter from "../features/plans/components/CategoryFilter";
 import PlanList from "../features/plans/components/PlanList";
 import { useQuery } from "@tanstack/react-query";
