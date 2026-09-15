@@ -1,11 +1,22 @@
 import { Link, useParams } from "react-router";
-import { usePlans } from "../context/PlansContext";
 import { useQuery } from "@tanstack/react-query";
 
 const catConfig = {
-  sport:  { color: "var(--color-coral)", bg: "var(--color-coral-light)", label: "Sport" },
-  social: { color: "var(--color-gold)",  bg: "var(--color-gold-light)",  label: "Social" },
-  life:   { color: "var(--color-green)", bg: "var(--color-green-light)", label: "Life" },
+  sport: {
+    color: "var(--color-coral)",
+    bg: "var(--color-coral-light)",
+    label: "Sport",
+  },
+  social: {
+    color: "var(--color-gold)",
+    bg: "var(--color-gold-light)",
+    label: "Social",
+  },
+  life: {
+    color: "var(--color-green)",
+    bg: "var(--color-green-light)",
+    label: "Life",
+  },
 };
 
 export default function PlanDetailPage() {
@@ -29,9 +40,15 @@ export default function PlanDetailPage() {
       <div className="flex flex-col items-center justify-center py-28">
         <div
           className="mb-5 h-10 w-10 animate-spin rounded-full border-[3px]"
-          style={{ borderColor: "var(--color-line)", borderTopColor: "var(--color-green)" }}
+          style={{
+            borderColor: "var(--color-line)",
+            borderTopColor: "var(--color-green)",
+          }}
         />
-        <p className="text-lg font-bold" style={{ fontFamily: "var(--font-display)" }}>
+        <p
+          className="text-lg font-bold"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           Loading the details…
         </p>
       </div>
@@ -46,7 +63,10 @@ export default function PlanDetailPage() {
         >
           ?
         </div>
-        <h2 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+        <h2
+          className="text-2xl font-bold"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           This plan doesn't exist
         </h2>
         <p className="mt-2 text-muted">
@@ -68,8 +88,18 @@ export default function PlanDetailPage() {
         to="/explore"
         className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
       >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
         All plans
       </Link>
@@ -78,10 +108,7 @@ export default function PlanDetailPage() {
         <div className="h-2" style={{ background: cfg.color }} />
 
         <div className="p-8 sm:p-10">
-          <span
-            className="cat-pill mb-5 inline-flex"
-            data-cat={plan.category}
-          >
+          <span className="cat-pill mb-5 inline-flex" data-cat={plan.category}>
             <span className="cat-dot" data-cat={plan.category} />
             {cfg.label}
           </span>
@@ -95,23 +122,38 @@ export default function PlanDetailPage() {
 
           <p className="mt-4 text-lg text-muted">{plan.location}</p>
 
-          <div className="my-8 h-px" style={{ background: "var(--color-line)" }} />
+          <div
+            className="my-8 h-px"
+            style={{ background: "var(--color-line)" }}
+          />
 
           <div className="grid grid-cols-3 gap-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Joined</p>
-              <p className="mt-1 text-3xl font-extrabold" style={{ fontFamily: "var(--font-display)" }}>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Joined
+              </p>
+              <p
+                className="mt-1 text-3xl font-extrabold"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 {plan.confirmedPlayers}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Capacity</p>
-              <p className="mt-1 text-3xl font-extrabold" style={{ fontFamily: "var(--font-display)" }}>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Capacity
+              </p>
+              <p
+                className="mt-1 text-3xl font-extrabold"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
                 {plan.capacity}
               </p>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">Spots left</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                Spots left
+              </p>
               <p
                 className="mt-1 text-3xl font-extrabold"
                 style={{
@@ -129,7 +171,10 @@ export default function PlanDetailPage() {
               <span className="text-xs font-medium text-muted">
                 {spotsLeft === 0 ? "Fully booked" : "Still room for you"}
               </span>
-              <span className="text-xs font-semibold" style={{ color: cfg.color }}>
+              <span
+                className="text-xs font-semibold"
+                style={{ color: cfg.color }}
+              >
                 {fillPercent}%
               </span>
             </div>
@@ -138,7 +183,8 @@ export default function PlanDetailPage() {
                 className="progress-fill"
                 style={{
                   width: `${fillPercent}%`,
-                  background: spotsLeft === 0 ? "var(--color-coral)" : cfg.color,
+                  background:
+                    spotsLeft === 0 ? "var(--color-coral)" : cfg.color,
                 }}
               />
             </div>

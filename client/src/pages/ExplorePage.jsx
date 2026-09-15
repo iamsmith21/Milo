@@ -2,10 +2,12 @@ import { useState } from "react";
 import CategoryFilter from "../features/plans/components/CategoryFilter";
 import PlanList from "../features/plans/components/PlanList";
 import { useQuery } from "@tanstack/react-query";
+import useDebounce from "../hooks/useDebounce";
 
 function ExplorePage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQ, setSearchQ] = useState("");
+  const debouncedSearchQ = useDebounce(searchQ, 500);
 
   const {
     data: plans = [],
@@ -25,9 +27,15 @@ function ExplorePage() {
       <div className="flex flex-col items-center justify-center py-28 text-center">
         <div
           className="mb-5 h-10 w-10 animate-spin rounded-full border-[3px]"
-          style={{ borderColor: "var(--color-line)", borderTopColor: "var(--color-green)" }}
+          style={{
+            borderColor: "var(--color-line)",
+            borderTopColor: "var(--color-green)",
+          }}
         />
-        <p className="text-lg font-bold" style={{ fontFamily: "var(--font-display)" }}>
+        <p
+          className="text-lg font-bold"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           Rounding up the plans…
         </p>
         <p className="mt-1 text-sm text-muted">Hang tight.</p>
@@ -44,7 +52,10 @@ function ExplorePage() {
           >
             !
           </div>
-          <p className="text-lg font-bold" style={{ fontFamily: "var(--font-display)" }}>
+          <p
+            className="text-lg font-bold"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             Something went sideways
           </p>
           <p className="mt-2 text-sm text-muted">
@@ -57,7 +68,9 @@ function ExplorePage() {
   const filteredPlans = plans.filter((plan) => {
     const matchedCategory =
       selectedCategory === "all" || plan.category === selectedCategory;
-    const matchesSearch = plan.title.toLowerCase().includes(searchQ.toLowerCase());
+    const matchesSearch = plan.title
+      .toLowerCase()
+      .includes(debouncedSearchQ.toLowerCase());
     return matchedCategory && matchesSearch;
   });
 
