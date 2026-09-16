@@ -43,6 +43,7 @@ export const createPlan = async (req, res) => {
         location,
         capacity: Number(capacity),
         category,
+        authorId: req.user.userId,
       },
     });
 

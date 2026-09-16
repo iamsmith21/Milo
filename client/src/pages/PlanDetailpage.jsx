@@ -1,5 +1,7 @@
 import { Link, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { apiFetch } from "../utils/api";
 
 const catConfig = {
   sport: {
@@ -29,7 +31,7 @@ export default function PlanDetailPage() {
   } = useQuery({
     queryKey: ["plan", id],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/api/plans/${id}`);
+      const response = await apiFetch(`http://localhost:3000/api/plans/${id}`);
       if (!response.ok) throw new Error("Failed to fetch plan");
       return response.json();
     },
@@ -83,7 +85,13 @@ export default function PlanDetailPage() {
   const spotsLeft = plan.capacity - plan.confirmedPlayers;
 
   return (
-    <div className="container mx-auto max-w-2xl py-8 sm:py-12">
+    <motion.div
+      className="container mx-auto max-w-2xl py-8 sm:py-12"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+    >
       <Link
         to="/explore"
         className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
@@ -191,6 +199,6 @@ export default function PlanDetailPage() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

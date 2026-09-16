@@ -1,8 +1,14 @@
+import { motion } from "framer-motion";
 import { Link } from "react-router";
 
 export default function LandingPage() {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+    >
       <section
         className="relative overflow-hidden"
         style={{ background: "var(--color-green)", minHeight: "94vh" }}
@@ -99,30 +105,51 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="relative mt-12 hidden lg:block" style={{ height: "420px" }}>
+            <div
+              className="relative mt-12 hidden lg:block"
+              style={{ height: "420px" }}
+            >
               <div
                 className="absolute left-0 top-0 w-64 overflow-hidden rounded-2xl bg-surface shadow-xl"
                 style={{ transform: "rotate(-3deg)" }}
               >
-                <div className="h-1.5 w-full" style={{ background: "var(--color-coral)" }} />
+                <div
+                  className="h-1.5 w-full"
+                  style={{ background: "var(--color-coral)" }}
+                />
                 <div className="p-4">
                   <span
                     className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider"
-                    style={{ background: "var(--color-coral-light)", color: "var(--color-coral)" }}
+                    style={{
+                      background: "var(--color-coral-light)",
+                      color: "var(--color-coral)",
+                    }}
                   >
                     Sport
                   </span>
                   <p
                     className="mt-3 text-base font-bold"
-                    style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      color: "var(--color-ink)",
+                    }}
                   >
                     Evening Badminton
                   </p>
                   <p className="mt-1 text-xs text-muted">Riverside Courts</p>
-                  <div className="mt-3 h-1 w-full overflow-hidden rounded-full" style={{ background: "var(--color-line)" }}>
-                    <div className="h-full w-3/4 rounded-full" style={{ background: "var(--color-coral)" }} />
+                  <div
+                    className="mt-3 h-1 w-full overflow-hidden rounded-full"
+                    style={{ background: "var(--color-line)" }}
+                  >
+                    <div
+                      className="h-full w-3/4 rounded-full"
+                      style={{ background: "var(--color-coral)" }}
+                    />
                   </div>
-                  <p className="mt-1.5 text-[11px] font-semibold" style={{ color: "var(--color-coral)" }}>
+                  <p
+                    className="mt-1.5 text-[11px] font-semibold"
+                    style={{ color: "var(--color-coral)" }}
+                  >
                     3 spots left
                   </p>
                 </div>
@@ -132,25 +159,43 @@ export default function LandingPage() {
                 className="absolute right-0 top-16 w-60 overflow-hidden rounded-2xl bg-surface shadow-xl"
                 style={{ transform: "rotate(2.5deg)" }}
               >
-                <div className="h-1.5 w-full" style={{ background: "var(--color-gold)" }} />
+                <div
+                  className="h-1.5 w-full"
+                  style={{ background: "var(--color-gold)" }}
+                />
                 <div className="p-4">
                   <span
                     className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider"
-                    style={{ background: "var(--color-gold-light)", color: "var(--color-gold)" }}
+                    style={{
+                      background: "var(--color-gold-light)",
+                      color: "var(--color-gold)",
+                    }}
                   >
                     Social
                   </span>
                   <p
                     className="mt-3 text-base font-bold"
-                    style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      color: "var(--color-ink)",
+                    }}
                   >
                     Coffee with Strangers
                   </p>
                   <p className="mt-1 text-xs text-muted">Groundwork Cafe</p>
-                  <div className="mt-3 h-1 w-full overflow-hidden rounded-full" style={{ background: "var(--color-line)" }}>
-                    <div className="h-full w-1/2 rounded-full" style={{ background: "var(--color-gold)" }} />
+                  <div
+                    className="mt-3 h-1 w-full overflow-hidden rounded-full"
+                    style={{ background: "var(--color-line)" }}
+                  >
+                    <div
+                      className="h-full w-1/2 rounded-full"
+                      style={{ background: "var(--color-gold)" }}
+                    />
                   </div>
-                  <p className="mt-1.5 text-[11px] font-semibold" style={{ color: "var(--color-gold)" }}>
+                  <p
+                    className="mt-1.5 text-[11px] font-semibold"
+                    style={{ color: "var(--color-gold)" }}
+                  >
                     5 spots left
                   </p>
                 </div>
@@ -160,25 +205,45 @@ export default function LandingPage() {
                 className="absolute bottom-8 left-8 w-56 overflow-hidden rounded-2xl bg-surface shadow-xl"
                 style={{ transform: "rotate(1deg)" }}
               >
-                <div className="h-1.5 w-full" style={{ background: "var(--color-green)" }} />
+                <div
+                  className="h-1.5 w-full"
+                  style={{ background: "var(--color-green)" }}
+                />
                 <div className="p-4">
                   <span
                     className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider"
-                    style={{ background: "var(--color-green-light)", color: "var(--color-green)" }}
+                    style={{
+                      background: "var(--color-green-light)",
+                      color: "var(--color-green)",
+                    }}
                   >
                     Life
                   </span>
                   <p
                     className="mt-3 text-base font-bold"
-                    style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      color: "var(--color-ink)",
+                    }}
                   >
                     Sunrise Hike
                   </p>
-                  <p className="mt-1 text-xs text-muted">Griffith Observatory</p>
-                  <div className="mt-3 h-1 w-full overflow-hidden rounded-full" style={{ background: "var(--color-line)" }}>
-                    <div className="h-full w-[85%] rounded-full" style={{ background: "var(--color-green)" }} />
+                  <p className="mt-1 text-xs text-muted">
+                    Griffith Observatory
+                  </p>
+                  <div
+                    className="mt-3 h-1 w-full overflow-hidden rounded-full"
+                    style={{ background: "var(--color-line)" }}
+                  >
+                    <div
+                      className="h-full w-[85%] rounded-full"
+                      style={{ background: "var(--color-green)" }}
+                    />
                   </div>
-                  <p className="mt-1.5 text-[11px] font-semibold" style={{ color: "var(--color-green)" }}>
+                  <p
+                    className="mt-1.5 text-[11px] font-semibold"
+                    style={{ color: "var(--color-green)" }}
+                  >
                     2 spots left
                   </p>
                 </div>
@@ -206,7 +271,7 @@ export default function LandingPage() {
             {[
               { num: "200+", label: "Plans created" },
               { num: "1.2k", label: "People joined" },
-              { num: "3",    label: "Vibes: Sport, Social, Life" },
+              { num: "3", label: "Vibes: Sport, Social, Life" },
             ].map((s) => (
               <div key={s.label} className="flex items-baseline gap-2">
                 <span
@@ -277,8 +342,8 @@ export default function LandingPage() {
                     i % 3 === 0
                       ? "var(--color-coral)"
                       : i % 3 === 1
-                      ? "var(--color-gold)"
-                      : "var(--color-green)",
+                        ? "var(--color-gold)"
+                        : "var(--color-green)",
                 }}
               />
               {item}
@@ -361,7 +426,10 @@ export default function LandingPage() {
 
           <div
             className="relative overflow-hidden rounded-2xl p-8 sm:col-span-1 lg:col-span-2"
-            style={{ background: "var(--color-gold-light)", minHeight: "175px" }}
+            style={{
+              background: "var(--color-gold-light)",
+              minHeight: "175px",
+            }}
           >
             <span
               className="inline-block rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
@@ -371,7 +439,10 @@ export default function LandingPage() {
             </span>
             <h3
               className="mt-5 text-2xl font-bold tracking-tight sm:text-3xl"
-              style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+              style={{
+                fontFamily: "var(--font-display)",
+                color: "var(--color-ink)",
+              }}
             >
               Coffee runs. Game nights.
               <br />
@@ -385,7 +456,10 @@ export default function LandingPage() {
 
           <div
             className="relative overflow-hidden rounded-2xl p-8 sm:col-span-1 lg:col-span-2"
-            style={{ background: "var(--color-green-light)", minHeight: "175px" }}
+            style={{
+              background: "var(--color-green-light)",
+              minHeight: "175px",
+            }}
           >
             <span
               className="inline-block rounded-lg px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
@@ -395,7 +469,10 @@ export default function LandingPage() {
             </span>
             <h3
               className="mt-5 text-2xl font-bold tracking-tight sm:text-3xl"
-              style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+              style={{
+                fontFamily: "var(--font-display)",
+                color: "var(--color-ink)",
+              }}
             >
               Hikes. Markets. Sunsets.
               <br />
@@ -433,7 +510,10 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div className="divide-y" style={{ borderColor: "var(--color-line)" }}>
+          <div
+            className="divide-y"
+            style={{ borderColor: "var(--color-line)" }}
+          >
             {[
               {
                 num: "01",
@@ -445,7 +525,7 @@ export default function LandingPage() {
                 num: "02",
                 color: "var(--color-gold)",
                 title: "Join",
-                body: "One button. That's it. No lengthy sign-ups, no calendar invites, no \"let me check with my friend.\" Just commit.",
+                body: 'One button. That\'s it. No lengthy sign-ups, no calendar invites, no "let me check with my friend." Just commit.',
               },
               {
                 num: "03",
@@ -504,7 +584,10 @@ export default function LandingPage() {
         <div
           aria-hidden="true"
           className="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full opacity-10"
-          style={{ background: "var(--color-coral)", transform: "translate(30%, -30%)" }}
+          style={{
+            background: "var(--color-coral)",
+            transform: "translate(30%, -30%)",
+          }}
         />
 
         <div className="container relative py-16 sm:py-24">
@@ -548,6 +631,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-    </div>
+    </motion.div>
   );
 }

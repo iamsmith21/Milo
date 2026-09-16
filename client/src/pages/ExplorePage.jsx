@@ -3,11 +3,14 @@ import CategoryFilter from "../features/plans/components/CategoryFilter";
 import PlanList from "../features/plans/components/PlanList";
 import { useQuery } from "@tanstack/react-query";
 import useDebounce from "../hooks/useDebounce";
+import { motion } from "framer-motion";
+import { apiFetch } from "../utils/api";
 
 function ExplorePage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQ, setSearchQ] = useState("");
   const debouncedSearchQ = useDebounce(searchQ, 500);
+
 
   const {
     data: plans = [],
@@ -16,7 +19,7 @@ function ExplorePage() {
   } = useQuery({
     queryKey: ["plans"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/api/plans");
+      const response = await apiFetch("http://localhost:3000/api/plans");
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     },
@@ -87,7 +90,13 @@ function ExplorePage() {
   // });
 
   return (
-    <div className="container py-10 sm:py-14">
+    <motion.div
+      className="container py-10 sm:py-14"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+    >
       <section aria-labelledby="explore-heading">
         <div className="mb-8 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -136,7 +145,7 @@ function ExplorePage() {
 
         <PlanList plans={filteredPlans} />
       </section>
-    </div>
+    </motion.div>
   );
 }
 

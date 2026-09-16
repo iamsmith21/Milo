@@ -52,13 +52,25 @@ const seedData = [
 ];
 
 async function main() {
+  const user = await prisma.user.findUnique({
+    where: { email: "deep.smith100@gmail.com" }
+  });
+
+  if (!user) {
+    console.error("User deep.smith100@gmail.com not found. Please sign up first.");
+    process.exit(1);
+  }
+
   console.log(`Clearing existing plans...`);
   await prisma.plan.deleteMany({});
   
   console.log(`Start seeding...`);
   for (const p of seedData) {
     const plan = await prisma.plan.create({
-      data: p,
+      data: {
+        ...p,
+        authorId: user.id
+      },
     });
     console.log(`Created plan with id: ${plan.id}`);
   }

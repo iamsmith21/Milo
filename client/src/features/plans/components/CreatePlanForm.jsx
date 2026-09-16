@@ -1,11 +1,31 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { apiFetch } from "../../../utils/api";
 
 const vibes = [
-  { value: "sport",  label: "Sport",  color: "var(--color-coral)",  bg: "var(--color-coral-light)", desc: "Get moving" },
-  { value: "social", label: "Social", color: "var(--color-gold)",   bg: "var(--color-gold-light)",  desc: "Hang out" },
-  { value: "life",   label: "Life",   color: "var(--color-green)",  bg: "var(--color-green-light)", desc: "Touch grass" },
+  {
+    value: "sport",
+    label: "Sport",
+    color: "var(--color-coral)",
+    bg: "var(--color-coral-light)",
+    desc: "Get moving",
+  },
+  {
+    value: "social",
+    label: "Social",
+    color: "var(--color-gold)",
+    bg: "var(--color-gold-light)",
+    desc: "Hang out",
+  },
+  {
+    value: "life",
+    label: "Life",
+    color: "var(--color-green)",
+    bg: "var(--color-green-light)",
+    desc: "Touch grass",
+  },
 ];
 
 export default function CreatePlanForm() {
@@ -27,9 +47,8 @@ export default function CreatePlanForm() {
 
   const createPlanMutation = useMutation({
     mutationFn: async (newPlanData) => {
-      const response = await fetch("http://localhost:3000/api/plans", {
+      const response = await apiFetch("http://localhost:3000/api/plans", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPlanData),
       });
       return response.json();
@@ -48,7 +67,13 @@ export default function CreatePlanForm() {
   const selectedVibe = vibes.find((v) => v.value === formData.category);
 
   return (
-    <div className="container mx-auto max-w-xl py-8 sm:py-14">
+    <motion.div
+      className="container mx-auto max-w-xl py-8 sm:py-14"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="mb-10 text-center">
         <h2
           className="text-3xl font-extrabold tracking-tight sm:text-4xl"
@@ -103,8 +128,16 @@ export default function CreatePlanForm() {
               stroke="currentColor"
               strokeWidth={1.5}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
             <input
               type="text"
@@ -118,7 +151,9 @@ export default function CreatePlanForm() {
                 borderColor: "var(--color-line)",
                 transition: "border-color 0.2s ease",
               }}
-              onFocus={(e) => (e.target.style.borderColor = "var(--color-green)")}
+              onFocus={(e) =>
+                (e.target.style.borderColor = "var(--color-green)")
+              }
               onBlur={(e) => (e.target.style.borderColor = "var(--color-line)")}
               placeholder="Riverside Courts, Downtown Cafe…"
             />
@@ -156,7 +191,9 @@ export default function CreatePlanForm() {
                   </div>
                   <span
                     className="text-sm font-bold"
-                    style={{ color: isSelected ? vibe.color : "var(--color-ink)" }}
+                    style={{
+                      color: isSelected ? vibe.color : "var(--color-ink)",
+                    }}
                   >
                     {vibe.label}
                   </span>
@@ -231,7 +268,9 @@ export default function CreatePlanForm() {
         <div
           className="overflow-hidden rounded-2xl"
           style={{
-            background: selectedVibe ? selectedVibe.color : "var(--color-green)",
+            background: selectedVibe
+              ? selectedVibe.color
+              : "var(--color-green)",
           }}
         >
           <div className="px-7 py-6 text-white">
@@ -245,7 +284,8 @@ export default function CreatePlanForm() {
               {formData.title || "Your awesome plan"}
             </h3>
             <p className="mt-1 text-sm text-white/65">
-              {formData.location || "Somewhere great"} · {formData.capacity} spots
+              {formData.location || "Somewhere great"} · {formData.capacity}{" "}
+              spots
             </p>
           </div>
           <button
@@ -257,6 +297,6 @@ export default function CreatePlanForm() {
           </button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 }

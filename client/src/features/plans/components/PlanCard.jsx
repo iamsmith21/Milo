@@ -1,10 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
+import { motion } from "framer-motion";
+import { apiFetch } from "../../../utils/api";
 
 const catConfig = {
-  sport:  { color: "var(--color-coral)",  bg: "var(--color-coral-light)", label: "Sport" },
-  social: { color: "var(--color-gold)",   bg: "var(--color-gold-light)",  label: "Social" },
-  life:   { color: "var(--color-green)",  bg: "var(--color-green-light)", label: "Life" },
+  sport: {
+    color: "var(--color-coral)",
+    bg: "var(--color-coral-light)",
+    label: "Sport",
+  },
+  social: {
+    color: "var(--color-gold)",
+    bg: "var(--color-gold-light)",
+    label: "Social",
+  },
+  life: {
+    color: "var(--color-green)",
+    bg: "var(--color-green-light)",
+    label: "Life",
+  },
 };
 
 export default function PlanCard({ plan }) {
@@ -12,11 +26,10 @@ export default function PlanCard({ plan }) {
 
   const joinMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(
+      const response = await apiFetch(
         `http://localhost:3000/api/plans/${plan.id}`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             hasJoined: true,
             confirmedPlayers: plan.confirmedPlayers + 1,
@@ -32,9 +45,8 @@ export default function PlanCard({ plan }) {
 
   const leaveMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`http://localhost:3000/api/plans/${plan.id}`, {
+      const res = await apiFetch(`http://localhost:3000/api/plans/${plan.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           hasJoined: false,
           confirmedPlayers: plan.confirmedPlayers - 1,
@@ -53,20 +65,16 @@ export default function PlanCard({ plan }) {
   const cfg = catConfig[plan.category] || catConfig.life;
 
   return (
-    <article
+    <motion.article
       className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl bg-surface"
-      style={{
-        boxShadow: "0 2px 8px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.04)",
-        transition: "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+      whileHover={{
+        y: -6,
+        boxShadow: "0 20px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)",
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-6px)";
-        e.currentTarget.style.boxShadow = "0 20px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "";
-        e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.04)";
-      }}
+      whileTap={{ scale: 0.98 }}
+      initial={{ opacity: 0, z: -200 }}
+      animate={{ opacity: 1, z: 0 }}
+      transition={{ duration: 0.4 }}
     >
       <Link
         to={`/plan/${plan.id}`}
@@ -99,9 +107,23 @@ export default function PlanCard({ plan }) {
 
       <Link to={`/plan/${plan.id}`} className="flex flex-1 flex-col px-6 py-5">
         <div className="flex items-center gap-2 text-sm text-muted">
-          <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          <svg
+            className="h-3.5 w-3.5 shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
           </svg>
           {plan.location}
         </div>
@@ -114,7 +136,9 @@ export default function PlanCard({ plan }) {
               </p>
               <p
                 className="mt-0.5 text-sm font-bold"
-                style={{ color: spotLeft === 0 ? "var(--color-coral)" : cfg.color }}
+                style={{
+                  color: spotLeft === 0 ? "var(--color-coral)" : cfg.color,
+                }}
               >
                 {spotLeft === 0
                   ? "Fully booked"
@@ -131,7 +155,10 @@ export default function PlanCard({ plan }) {
             )}
           </div>
 
-          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full" style={{ background: "var(--color-line)" }}>
+          <div
+            className="mt-3 h-1.5 w-full overflow-hidden rounded-full"
+            style={{ background: "var(--color-line)" }}
+          >
             <div
               className="h-full rounded-full"
               style={{
@@ -147,7 +174,13 @@ export default function PlanCard({ plan }) {
       <div className="grid grid-cols-[1fr_auto] gap-0 border-t border-line/60">
         <button
           className="flex items-center justify-center py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
-          style={{ background: hasJoined ? "var(--color-green)" : (spotLeft === 0 ? "var(--color-muted)" : cfg.color) }}
+          style={{
+            background: hasJoined
+              ? "var(--color-green)"
+              : spotLeft === 0
+                ? "var(--color-muted)"
+                : cfg.color,
+          }}
           onClick={() => joinMutation.mutate()}
           disabled={spotLeft === 0 || hasJoined}
         >
@@ -162,6 +195,6 @@ export default function PlanCard({ plan }) {
           Leave
         </button>
       </div>
-    </article>
+    </motion.article>
   );
 }
