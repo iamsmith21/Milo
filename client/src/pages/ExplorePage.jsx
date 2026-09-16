@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CategoryFilter from "../features/plans/components/CategoryFilter";
 import PlanList from "../features/plans/components/PlanList";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +21,18 @@ function ExplorePage() {
       return response.json();
     },
   });
+
+  const filteredPlans = useMemo(() => {
+    return plans.filter((plan) => {
+      const matchedCategory =
+        selectedCategory === "all" || plan.category === selectedCategory;
+      const matchesSearch = plan.title
+        .toLowerCase()
+        .includes(debouncedSearchQ.toLowerCase());
+
+      return matchedCategory && matchesSearch;
+    });
+  }, [plans, selectedCategory, debouncedSearchQ]);
 
   if (isLoading)
     return (
@@ -65,14 +77,14 @@ function ExplorePage() {
       </div>
     );
 
-  const filteredPlans = plans.filter((plan) => {
-    const matchedCategory =
-      selectedCategory === "all" || plan.category === selectedCategory;
-    const matchesSearch = plan.title
-      .toLowerCase()
-      .includes(debouncedSearchQ.toLowerCase());
-    return matchedCategory && matchesSearch;
-  });
+  // const filteredPlans = plans.filter((plan) => {
+  //   const matchedCategory =
+  //     selectedCategory === "all" || plan.category === selectedCategory;
+  //   const matchesSearch = plan.title
+  //     .toLowerCase()
+  //     .includes(debouncedSearchQ.toLowerCase());
+  //   return matchedCategory && matchesSearch;
+  // });
 
   return (
     <div className="container py-10 sm:py-14">
