@@ -11,6 +11,10 @@ app.use(express.json());
 // Routes
 app.use("/api/plans", planRouter);
 app.use("/api/auth", authRouter);
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
