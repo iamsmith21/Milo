@@ -87,7 +87,7 @@ export default function PlanDetailPage() {
 
   return (
     <motion.div
-      className="container mx-auto max-w-2xl py-8 sm:py-12"
+      className="container mx-auto max-w-5xl py-8 sm:py-12"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
@@ -113,93 +113,97 @@ export default function PlanDetailPage() {
         All plans
       </Link>
 
-      <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
+          <div className="h-2" style={{ background: cfg.color }} />
+          <div className="p-8 sm:p-10">
+            <span
+              className="cat-pill mb-5 inline-flex"
+              data-cat={plan.category}
+            >
+              <span className="cat-dot" data-cat={plan.category} />
+              {cfg.label}
+            </span>
+
+            <h1
+              className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              {plan.title}
+            </h1>
+
+            <p className="mt-4 text-lg text-muted">{plan.location}</p>
+
+            <div
+              className="my-8 h-px"
+              style={{ background: "var(--color-line)" }}
+            />
+
+            <div className="grid grid-cols-3 gap-6">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Joined
+                </p>
+                <p
+                  className="mt-1 text-3xl font-extrabold"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {plan.confirmedPlayers}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Capacity
+                </p>
+                <p
+                  className="mt-1 text-3xl font-extrabold"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {plan.capacity}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Spots left
+                </p>
+                <p
+                  className="mt-1 text-3xl font-extrabold"
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    color: spotsLeft === 0 ? "var(--color-coral)" : cfg.color,
+                  }}
+                >
+                  {spotsLeft}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs font-medium text-muted">
+                  {spotsLeft === 0 ? "Fully booked" : "Still room for you"}
+                </span>
+                <span
+                  className="text-xs font-semibold"
+                  style={{ color: cfg.color }}
+                >
+                  {fillPercent}%
+                </span>
+              </div>
+              <div className="progress-track !h-2">
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${fillPercent}%`,
+                    background:
+                      spotsLeft === 0 ? "var(--color-coral)" : cfg.color,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div >
         <ChatRoom planId={plan.id} initialMessage={plan.messages || []} />
-        <div className="h-2" style={{ background: cfg.color }} />
-
-        <div className="p-8 sm:p-10">
-          <span className="cat-pill mb-5 inline-flex" data-cat={plan.category}>
-            <span className="cat-dot" data-cat={plan.category} />
-            {cfg.label}
-          </span>
-
-          <h1
-            className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {plan.title}
-          </h1>
-
-          <p className="mt-4 text-lg text-muted">{plan.location}</p>
-
-          <div
-            className="my-8 h-px"
-            style={{ background: "var(--color-line)" }}
-          />
-
-          <div className="grid grid-cols-3 gap-6">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                Joined
-              </p>
-              <p
-                className="mt-1 text-3xl font-extrabold"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {plan.confirmedPlayers}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                Capacity
-              </p>
-              <p
-                className="mt-1 text-3xl font-extrabold"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {plan.capacity}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                Spots left
-              </p>
-              <p
-                className="mt-1 text-3xl font-extrabold"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  color: spotsLeft === 0 ? "var(--color-coral)" : cfg.color,
-                }}
-              >
-                {spotsLeft}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-medium text-muted">
-                {spotsLeft === 0 ? "Fully booked" : "Still room for you"}
-              </span>
-              <span
-                className="text-xs font-semibold"
-                style={{ color: cfg.color }}
-              >
-                {fillPercent}%
-              </span>
-            </div>
-            <div className="progress-track !h-2">
-              <div
-                className="progress-fill"
-                style={{
-                  width: `${fillPercent}%`,
-                  background:
-                    spotsLeft === 0 ? "var(--color-coral)" : cfg.color,
-                }}
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </motion.div>
   );
