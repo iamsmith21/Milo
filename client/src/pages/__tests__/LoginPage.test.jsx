@@ -17,5 +17,11 @@ describe("Login Page", () => {
     const heading = screen.getByText("Welcome Back");
 
     expect(heading).toBeInTheDocument();
+
+    const email = screen.getByLabelText("Email");
+    const passwordInput = screen.getByLabelText("Password");
+
+    expect(email).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
   });
 });

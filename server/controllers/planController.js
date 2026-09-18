@@ -19,6 +19,13 @@ export const getPlanById = async (req, res) => {
 
     const plan = await prisma.plan.findUnique({
       where: { id: Number(planId) },
+
+      include: {
+        messages: {
+          include: { user: true },
+          orderBy: { createdAt: "asc" },
+        },
+      },
     });
 
     if (!plan) {

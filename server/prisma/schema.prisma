@@ -17,6 +17,7 @@ model Plan {
   hasJoined        Boolean  @default(true)
   authorId Int
   author User @relation(fields: [authorId], references: [id])
+  messages Message[]
 }
 
 model User {
@@ -25,4 +26,15 @@ model User {
   password String
   name String
   plans Plan[]
+  messages Message[]
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  text String
+  planId Int
+  plan Plan @relation(fields: [planId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references:[id])
+  createdAt DateTime @default(now())
 }

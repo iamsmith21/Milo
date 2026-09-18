@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { apiFetch } from "../utils/api";
+import ChatRoom from "./ChatRoom";
 
 const catConfig = {
   sport: {
@@ -113,6 +114,7 @@ export default function PlanDetailPage() {
       </Link>
 
       <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
+        <ChatRoom planId={plan.id} initialMessage={plan.messages || []} />
         <div className="h-2" style={{ background: cfg.color }} />
 
         <div className="p-8 sm:p-10">
