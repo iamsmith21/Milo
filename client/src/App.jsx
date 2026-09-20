@@ -10,6 +10,7 @@ import PlanDetailPage from "./pages/PlanDetailpage";
 import { AnimatePresence } from "framer-motion";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SignupPage from "./pages/SignupPage";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function App() {
   const location = useLocation();
@@ -46,6 +47,7 @@ export default function App() {
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/profilepage" element={<ProfilePage />} />
         </Routes>
       </AnimatePresence>
     </AppLayout>

@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 
 import planRouter from "./routes/planRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 import prisma from "./config/db.js";
 
 const app = express();
@@ -56,7 +57,7 @@ app.use(express.json());
 // Routes
 app.use("/api/plans", planRouter);
 app.use("/api/auth", authRouter);
-
+app.use("/api/users", userRouter);
 if (process.env.NODE_ENV !== "test") {
   httpServer.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

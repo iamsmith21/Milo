@@ -85,13 +85,14 @@ export default function AppHeader() {
         <div className="flex items-center gap-2 pr-1">
           {user ? (
             <div className="flex items-center gap-2">
-              <div
+              <NavLink
+              to="/profilepage"
                 className="flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold text-white"
                 style={{ background: "var(--color-green)" }}
                 title={user.name}
               >
                 {user.name?.charAt(0).toUpperCase()}
-              </div>
+              </NavLink>
 
               <NavLink
                 to="/create"

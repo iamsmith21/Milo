@@ -40,6 +40,7 @@ export default function PlanCard({ plan }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["plans"] });
+      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
     },
   });
 
@@ -56,6 +57,7 @@ export default function PlanCard({ plan }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["plans"] });
+      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
     },
   });
 
