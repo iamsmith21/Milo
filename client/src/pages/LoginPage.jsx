@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router";
 import { motion } from "framer-motion";
+import { API_URL } from "../utils/api";
 
 const WITTY_REASONS = [
   "Your couch will still be there at 10 PM. Sunset pickup volleyball won't.",
@@ -29,7 +30,7 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

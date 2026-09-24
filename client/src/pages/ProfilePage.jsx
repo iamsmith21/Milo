@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "../utils/api";
 import PlanList from "../features/plans/components/PlanList";
-import { useEffect } from "react";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -15,9 +14,7 @@ export default function ProfilePage() {
   } = useQuery({
     queryKey: ["userPlans"],
     queryFn: async () => {
-      const response = await apiFetch(
-        "http://localhost:3000/api/users/me/plans",
-      );
+      const response = await apiFetch("/api/users/me/plans");
       if (!response.ok) throw new Error("Failed to fetch user plans");
       return response.json();
     },

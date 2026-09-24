@@ -77,3 +77,38 @@ export const updatePlan = async (req, res) => {
     res.status(500).json({ error: "Failed to update plan" });
   }
 };
+
+export const deletePlan = async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const { userId } = req.user;
+
+    const plan = await prisma.plan.findUnique({
+      where: { id: Number(planId) },
+    });
+
+    if (!plan) {
+      return res.status(404).json({
+        error: "Plan not found",
+      });
+    }
+
+    if (plan.authorId != userId) {
+      return res
+        .status(403)
+        .json({ error: "Access Denied : You do not own this plan." });
+    }
+
+    await prisma.message.deleteMany({
+      where: { planId: Number(planId) },
+    });
+
+    await prisma.plan.delete({
+      where: { id: Number(planId) },
+    });
+
+    res.json({ message: "Plan successfully deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete plan" });
+  }
+};

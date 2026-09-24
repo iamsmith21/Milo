@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { apiFetch } from "../../../utils/api";
+import { useAuth } from "../../../context/AuthContext";
 
 const catConfig = {
   sport: {
@@ -22,20 +23,30 @@ const catConfig = {
 };
 
 export default function PlanCard({ plan }) {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiFetch(`/api/plans/${plan.id}`, {
+        method: "DELETE",
+      });
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["plans"] });
+      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
+    },
+  });
   const joinMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiFetch(
-        `http://localhost:3000/api/plans/${plan.id}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            hasJoined: true,
-            confirmedPlayers: plan.confirmedPlayers + 1,
-          }),
-        },
-      );
+      const response = await apiFetch(`/api/plans/${plan.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          hasJoined: true,
+          confirmedPlayers: plan.confirmedPlayers + 1,
+        }),
+      });
       return response;
     },
     onSuccess: () => {
@@ -46,7 +57,7 @@ export default function PlanCard({ plan }) {
 
   const leaveMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiFetch(`http://localhost:3000/api/plans/${plan.id}`, {
+      const res = await apiFetch(`/api/plans/${plan.id}`, {
         method: "PATCH",
         body: JSON.stringify({
           hasJoined: false,
@@ -99,11 +110,23 @@ export default function PlanCard({ plan }) {
             </h2>
           </div>
           <span
-            className="ml-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+            className="ml-3 flex mt-7 h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold"
             style={{ background: "rgba(255,255,255,0.2)", color: "white" }}
           >
             {fillPercent}%
           </span>
+
+          {user?.id === plan.authorId && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                deleteMutation.mutate();
+              }}
+              className="z-10 absolute right-4 top-4 rounded-md bg-white/20 px-3 py-1 text-xs font-bold text-white hover:bg-white/30 backdrop-blur-md transition-colors"
+            >
+              Delete
+            </button>
+          )}
         </div>
       </Link>
 

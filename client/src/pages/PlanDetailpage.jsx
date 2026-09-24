@@ -32,7 +32,7 @@ export default function PlanDetailPage() {
   } = useQuery({
     queryKey: ["plan", id],
     queryFn: async () => {
-      const response = await apiFetch(`http://localhost:3000/api/plans/${id}`);
+      const response = await apiFetch(`/api/plans/${id}`);
       if (!response.ok) throw new Error("Failed to fetch plan");
       return response.json();
     },

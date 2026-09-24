@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "../context/AuthContext";
 import { useRef } from "react";
+import { API_URL } from "../utils/api";
 
-const socket = io("http://localhost:3000");
+const socket = io(API_URL);
 export default function ChatRoom({ planId, initialMessage }) {
   const { user } = useAuth();
   const [messages, setMessages] = useState(initialMessage);

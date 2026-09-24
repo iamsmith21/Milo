@@ -19,7 +19,7 @@ function ExplorePage() {
   } = useQuery({
     queryKey: ["plans"],
     queryFn: async () => {
-      const response = await apiFetch("http://localhost:3000/api/plans");
+      const response = await apiFetch("/api/plans");
       if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     },

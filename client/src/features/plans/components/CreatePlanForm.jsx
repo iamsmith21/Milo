@@ -47,7 +47,7 @@ export default function CreatePlanForm() {
 
   const createPlanMutation = useMutation({
     mutationFn: async (newPlanData) => {
-      const response = await apiFetch("http://localhost:3000/api/plans", {
+      const response = await apiFetch("/api/plans", {
         method: "POST",
         body: JSON.stringify(newPlanData),
       });

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router";
 import { motion } from "framer-motion";
+import { API_URL } from "../utils/api";
 
 const SIGNUP_JOKES = [
   "Rule #1: If you say you're coming, show up. The coffee shop table was hard to reserve.",
@@ -29,7 +30,7 @@ export default function SignupPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
+      const response = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

@@ -13,7 +13,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -59,7 +59,7 @@ app.use("/api/plans", planRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 if (process.env.NODE_ENV !== "test") {
-  httpServer.listen(PORT, () => {
+  httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
 }
