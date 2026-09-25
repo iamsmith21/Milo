@@ -3,9 +3,12 @@ import { useAuth } from "../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "../utils/api";
 import PlanList from "../features/plans/components/PlanList";
+import { useState } from "react";
+import CategoryFilter from "../features/plans/components/CategoryFilter";
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const [activeCategory, setActiveCategory] = useState("all");
 
   const {
     data: plans = [],
@@ -18,6 +21,13 @@ export default function ProfilePage() {
       if (!response.ok) throw new Error("Failed to fetch user plans");
       return response.json();
     },
+  });
+
+  const filteredPlans = plans.filter((plan) => {
+    if (activeCategory === "all") {
+      return true;
+    }
+    return plan.category === activeCategory;
   });
 
   return (
@@ -54,7 +64,13 @@ export default function ProfilePage() {
           <p className="text-muted">You haven't created any plans yet.</p>
         </div>
       ) : (
-        <PlanList plans={plans} />
+        <>
+          <CategoryFilter
+            selectedCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+          />
+          <PlanList plans={filteredPlans} />
+        </>
       )}
     </motion.div>
   );
