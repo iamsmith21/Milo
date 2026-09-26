@@ -5,6 +5,13 @@ export const getAllPlans = async (req, res) => {
   try {
     const allPlans = await prisma.plan.findMany({
       orderBy: { createdAt: "desc" },
+      include: {
+        participants: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
     res.json(allPlans);
   } catch (error) {
@@ -42,7 +49,8 @@ export const getPlanById = async (req, res) => {
 // POST /api/plans
 export const createPlan = async (req, res) => {
   try {
-    const { title, location, capacity, category } = req.body;
+    const { title, location, capacity, category, time, date, description } =
+      req.body;
 
     const newPlan = await prisma.plan.create({
       data: {
@@ -51,6 +59,9 @@ export const createPlan = async (req, res) => {
         capacity: Number(capacity),
         category,
         authorId: req.user.userId,
+        time,
+        date,
+        description,
       },
     });
 
@@ -110,5 +121,67 @@ export const deletePlan = async (req, res) => {
     res.json({ message: "Plan successfully deleted" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete plan" });
+  }
+};
+
+export const joinPlan = async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const { userId } = req.user;
+
+    await prisma.planParticipant.create({
+      data: {
+        planId: Number(planId),
+        userId: userId,
+      },
+    });
+
+    // doing the count
+    await prisma.plan.update({
+      where: {
+        id: Number(planId),
+      },
+      data: {
+        confirmedPlayers: { increment: 1 },
+      },
+    });
+
+    res.json({ message: "Successfully joined the plan!" });
+  } catch (error) {
+    console.error("JOIN PLAN ERROR:", error);
+    res
+      .status(400)
+      .json({ error: "You already joined this plan or it failed." });
+  }
+};
+
+export const leavePlan = async (req, res) => {
+  try {
+    const { planId } = req.params;
+    const { userId } = req.user;
+
+    await prisma.planParticipant.delete({
+      where: {
+        planId_userId: {
+          planId: Number(planId),
+          userId: userId,
+        },
+      },
+    });
+
+    // doing the count
+    await prisma.plan.update({
+      where: {
+        id: Number(planId),
+      },
+      data: {
+        confirmedPlayers: { decrement: 1 },
+      },
+    });
+
+    res.json({ message: "Successfully left the plan!" });
+  } catch (error) {
+    console.error("LEAVE PLAN ERROR:", error);
+    res.status(400).json({ error: "Failed to leave plan." });
   }
 };

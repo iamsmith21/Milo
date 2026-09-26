@@ -12,6 +12,11 @@ router.get("/me/plans", verifyToken, async (req, res) => {
     const userPlans = await prisma.plan.findMany({
       where: { authorId: id },
       orderBy: { createdAt: "desc" },
+      include: {
+        participants: {
+          user: true,
+        },
+      },
     });
 
     res.json(userPlans);

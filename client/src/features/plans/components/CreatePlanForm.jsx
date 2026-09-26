@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { apiFetch } from "../../../utils/api";
+import { MapPin } from "lucide-react";
 
 const vibes = [
   {
@@ -34,9 +35,15 @@ export default function CreatePlanForm() {
     location: "",
     capacity: 2,
     category: "social",
+    time: "",
+    date: "",
+    description: "",
   });
 
   const navigate = useNavigate();
+
+  // useRef - in use
+  const titleInputRef = useRef(null);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -66,6 +73,9 @@ export default function CreatePlanForm() {
 
   const selectedVibe = vibes.find((v) => v.value === formData.category);
 
+  useEffect(() => {
+    titleInputRef.current.focus();
+  }, []);
   return (
     <motion.div
       className="container mx-auto max-w-xl py-8 sm:py-14"
@@ -110,6 +120,7 @@ export default function CreatePlanForm() {
             onFocus={(e) => (e.target.style.borderColor = "var(--color-green)")}
             onBlur={(e) => (e.target.style.borderColor = "var(--color-line)")}
             placeholder="Evening badminton"
+            ref={titleInputRef}
           />
         </div>
 
@@ -121,24 +132,7 @@ export default function CreatePlanForm() {
             Where's it going down?
           </label>
           <div className="relative">
-            <svg
-              className="pointer-events-none absolute left-0 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
+            <MapPin className="pointer-events-none absolute left-0 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
             <input
               type="text"
               id="location"
@@ -158,6 +152,60 @@ export default function CreatePlanForm() {
               placeholder="Riverside Courts, Downtown Cafe…"
             />
           </div>
+        </div>
+
+        <div className="mb-8">
+          <label
+            htmlFor="date"
+            className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted"
+          >
+            What Date?
+          </label>
+
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-line bg-surface p-4 text-ink transition-colors focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+          />
+        </div>
+
+        <div className="mb-8">
+          <label
+            htmlFor="time"
+            className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted"
+          >
+            What Time?
+          </label>
+
+          <input
+            type="time"
+            id="time"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-line bg-surface p-4 text-ink transition-colors focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+          />
+        </div>
+
+        <div className="mb-8">
+          <label
+            htmlFor="description"
+            className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted"
+          >
+            Description
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Bring your own basketball, we'll meet at the north court..."
+            value={formData.description}
+            onChange={handleChange}
+            rows={4}
+            className="w-full resize-none rounded-xl border border-line bg-surface p-4 text-ink transition-colors focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+          />
         </div>
 
         <div className="mb-8">

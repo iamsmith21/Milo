@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { apiFetch } from "../../../utils/api";
 import { useAuth } from "../../../context/AuthContext";
+import { MapPin } from "lucide-react";
 
 const catConfig = {
   sport: {
@@ -40,12 +41,8 @@ export default function PlanCard({ plan }) {
   });
   const joinMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiFetch(`/api/plans/${plan.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          hasJoined: true,
-          confirmedPlayers: plan.confirmedPlayers + 1,
-        }),
+      const response = await apiFetch(`/api/plans/${plan.id}/join`, {
+        method: "POST",
       });
       return response;
     },
@@ -57,12 +54,8 @@ export default function PlanCard({ plan }) {
 
   const leaveMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiFetch(`/api/plans/${plan.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({
-          hasJoined: false,
-          confirmedPlayers: plan.confirmedPlayers - 1,
-        }),
+      const res = await apiFetch(`/api/plans/${plan.id}/leave`, {
+        method: "DELETE",
       });
       return res;
     },
@@ -72,10 +65,14 @@ export default function PlanCard({ plan }) {
     },
   });
 
-  const { confirmedPlayers, hasJoined } = plan;
+  const { confirmedPlayers } = plan;
   const spotLeft = plan.capacity - confirmedPlayers;
   const fillPercent = Math.round((confirmedPlayers / plan.capacity) * 100);
   const cfg = catConfig[plan.category] || catConfig.life;
+
+  const hasJoined = plan.participants?.some(
+    (participant) => participant.userId === user.id,
+  );
 
   return (
     <motion.article
@@ -132,25 +129,9 @@ export default function PlanCard({ plan }) {
 
       <Link to={`/plan/${plan.id}`} className="flex flex-1 flex-col px-6 py-5">
         <div className="flex items-center gap-2 text-sm text-muted">
-          <svg
-            className="h-3.5 w-3.5 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
+          <MapPin className="h-3.5 w-3.5 shrink-0" />
           {plan.location}
+          {plan.time} . {plan.date}
         </div>
 
         <div className="mt-auto pt-5">
@@ -180,6 +161,29 @@ export default function PlanCard({ plan }) {
             )}
           </div>
 
+          {plan.participants && plan.participants.length > 0 && (
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex -space-x-2">
+                {plan.participants.slice(0, 4).map((part, idx) => (
+                  <div
+                    key={part.id}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold text-white shadow-sm ring-2 ring-surface"
+                    style={{
+                      background: cfg.color,
+                      zIndex: 10 - idx,
+                    }}
+                    title={part.user.name}
+                  >
+                    {part.user.name.charAt(0).toUpperCase()}
+                  </div>
+                ))}
+              </div>
+              <span className="text-xs font-semibold text-muted">
+                {plan.participants.length} going!
+              </span>
+            </div>
+          )}
+
           <div
             className="mt-3 h-1.5 w-full overflow-hidden rounded-full"
             style={{ background: "var(--color-line)" }}
@@ -196,30 +200,32 @@ export default function PlanCard({ plan }) {
         </div>
       </Link>
 
-      <div className="grid grid-cols-[1fr_auto] gap-0 border-t border-line/60">
-        <button
-          className="flex items-center justify-center py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
-          style={{
-            background: hasJoined
-              ? "var(--color-green)"
-              : spotLeft === 0
-                ? "var(--color-muted)"
-                : cfg.color,
-          }}
-          onClick={() => joinMutation.mutate()}
-          disabled={spotLeft === 0 || hasJoined}
-        >
-          {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "I'm in"}
-        </button>
+      {plan.authorId !== user.id && (
+        <div className="grid grid-cols-[1fr_auto] gap-0 border-t border-line/60">
+          <button
+            className="flex items-center justify-center py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+            style={{
+              background: hasJoined
+                ? "var(--color-green)"
+                : spotLeft === 0
+                  ? "var(--color-muted)"
+                  : cfg.color,
+            }}
+            onClick={() => joinMutation.mutate()}
+            disabled={spotLeft === 0 || hasJoined}
+          >
+            {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "I'm in"}
+          </button>
 
-        <button
-          className="border-l border-line/60 px-5 py-3.5 text-sm font-semibold text-muted transition-colors hover:bg-surface-warm hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
-          onClick={() => leaveMutation.mutate()}
-          disabled={!hasJoined}
-        >
-          Leave
-        </button>
-      </div>
+          <button
+            className="border-l border-line/60 px-5 py-3.5 text-sm font-semibold text-muted transition-colors hover:bg-surface-warm hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
+            onClick={() => leaveMutation.mutate()}
+            disabled={!hasJoined}
+          >
+            Leave
+          </button>
+        </div>
+      )}
     </motion.article>
   );
 }

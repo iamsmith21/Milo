@@ -15,9 +15,17 @@ model Plan {
   category         String
   confirmedPlayers Int      @default(1)
   hasJoined        Boolean  @default(true)
+  time String
+  date String
+  description String
+  coverImage String?
+  latitude Float?
+  longitude Float?
+  status String @default("ACTIVE")
   authorId Int
   author User @relation(fields: [authorId], references: [id])
   messages Message[]
+  participants PlanParticipant[]
 }
 
 model User {
@@ -27,6 +35,7 @@ model User {
   name String
   plans Plan[]
   messages Message[]
+  joinedPlans PlanParticipant[]
 }
 
 model Message {
@@ -37,4 +46,16 @@ model Message {
   userId Int
   user User @relation(fields: [userId], references:[id])
   createdAt DateTime @default(now())
+}
+
+model PlanParticipant {
+  id Int @id @default(autoincrement())
+  planId Int
+  userId Int
+  joinedAt DateTime @default(now())
+
+  plan Plan @relation(fields : [planId], references: [id], onDelete: Cascade)
+  user User @relation(fields : [userId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, userId])
 }

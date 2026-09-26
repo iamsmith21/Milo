@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { apiFetch } from "../utils/api";
 import ChatRoom from "./ChatRoom";
+import { ChevronLeft } from "lucide-react";
 
 const catConfig = {
   sport: {
@@ -97,19 +98,7 @@ export default function PlanDetailPage() {
         to="/explore"
         className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-ink"
       >
-        <svg
-          className="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
+        <ChevronLeft className="h-4 w-4" />
         All plans
       </Link>
 
