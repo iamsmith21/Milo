@@ -1,9 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { apiFetch } from "../../../utils/api";
 import { useAuth } from "../../../context/AuthContext";
 import { MapPin } from "lucide-react";
+import { usePlanActions } from "../hooks/usePlanActions";
 
 const catConfig = {
   sport: {
@@ -25,46 +24,7 @@ const catConfig = {
 
 export default function PlanCard({ plan }) {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
-
-  const deleteMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiFetch(`/api/plans/${plan.id}`, {
-        method: "DELETE",
-      });
-      return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["plans"] });
-      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
-    },
-  });
-  const joinMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiFetch(`/api/plans/${plan.id}/join`, {
-        method: "POST",
-      });
-      return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["plans"] });
-      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
-    },
-  });
-
-  const leaveMutation = useMutation({
-    mutationFn: async () => {
-      const res = await apiFetch(`/api/plans/${plan.id}/leave`, {
-        method: "DELETE",
-      });
-      return res;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["plans"] });
-      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
-    },
-  });
-
+  const { joinPlan, leavePlan, deletePlan } = usePlanActions(plan.id);
   const { confirmedPlayers } = plan;
   const spotLeft = plan.capacity - confirmedPlayers;
   const fillPercent = Math.round((confirmedPlayers / plan.capacity) * 100);
@@ -117,7 +77,7 @@ export default function PlanCard({ plan }) {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                deleteMutation.mutate();
+                deletePlan();
               }}
               className="z-10 absolute right-4 top-4 rounded-md bg-white/20 px-3 py-1 text-xs font-bold text-white hover:bg-white/30 backdrop-blur-md transition-colors"
             >
@@ -211,7 +171,7 @@ export default function PlanCard({ plan }) {
                   ? "var(--color-muted)"
                   : cfg.color,
             }}
-            onClick={() => joinMutation.mutate()}
+            onClick={joinPlan}
             disabled={spotLeft === 0 || hasJoined}
           >
             {hasJoined ? "Joined" : spotLeft === 0 ? "Full" : "I'm in"}
@@ -219,7 +179,7 @@ export default function PlanCard({ plan }) {
 
           <button
             className="border-l border-line/60 px-5 py-3.5 text-sm font-semibold text-muted transition-colors hover:bg-surface-warm hover:text-ink disabled:cursor-not-allowed disabled:opacity-30"
-            onClick={() => leaveMutation.mutate()}
+            onClick={leavePlan}
             disabled={!hasJoined}
           >
             Leave
