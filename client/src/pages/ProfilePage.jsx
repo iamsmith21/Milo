@@ -9,11 +9,12 @@ import CategoryFilter from "../features/plans/components/CategoryFilter";
 export default function ProfilePage() {
   const { user } = useAuth();
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState("created")
 
   const {
-    data: plans = [],
-    isLoading,
-    isError,
+    data: createdPlans = [],
+    isLoading: isLoadingCreated,
+    isError: isErrorCreated,
   } = useQuery({
     queryKey: ["userPlans"],
     queryFn: async () => {
@@ -23,7 +24,24 @@ export default function ProfilePage() {
     },
   });
 
-  const filteredPlans = plans.filter((plan) => {
+  const {
+    data: joinedPlans = [],
+    isLoading: isLoadingJoined,
+    isError: isErrorJoined
+  } = useQuery({
+    queryKey: ["joinedPlans"],
+    queryFn: async () => {
+      const response = await apiFetch("/api/users/me/joined-plans")
+      if (!response.ok) throw new Error("Failed to fetch user joined plans")
+      return response.json()
+    }
+  })
+
+  const currentPlans = activeTab === "created" ? createdPlans : joinedPlans
+  const isLoading = activeTab === "created" ? isLoadingCreated : isLoadingJoined
+  const isError = activeTab === "created" ? isErrorCreated : isErrorJoined
+
+  const filteredPlans = currentPlans.filter((plan) => {
     if (activeCategory === "all") {
       return true;
     }
@@ -48,20 +66,38 @@ export default function ProfilePage() {
         <p className="mt-2 text-muted">{user?.email}</p>
       </div>
 
-      <div className="mb-6 flex items-center justify-between border-b border-line pb-4">
-        <h2 className="text-xl font-bold">Plans You Created</h2>
-        <span className="rounded-full bg-coral/10 px-3 py-1 text-xs font-bold text-coral">
-          {plans.length}
-        </span>
+
+      <div className="mb-8 inline-flex items-center gap-1.5 rounded-2xl border border-line bg-surface-warm p-1.5">
+        <button onClick={() => setActiveTab("created")}
+          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm transition-all duration-150 ${activeTab === "created" ? "bg-surface text-ink font-bold shadow-sm" : "text-muted hover:text-ink font-semibold"}`}>
+          Created Plans <span
+            className={`rounded-full px-2 py-0.5 text-xs font-bold transition-colors ${activeTab === "created"
+              ? "bg-coral/10 text-coral"
+              : "bg-line text-muted"
+              }`}
+          >{createdPlans.length}</span>
+        </button>
+        <button onClick={() => setActiveTab("joined")}
+          className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm transition-all duration-150 ${activeTab === "joined" ? "bg-surface text-ink font-bold shadow-sm" : "text-muted hover:text-ink font-semibold"}`}>
+          Joined Plans <span
+            className={`rounded-full px-2 py-0.5 text-xs font-bold transition-colors ${activeTab === "joined"
+              ? "bg-coral/10 text-coral"
+              : "bg-line text-muted"
+              }`}
+          >{joinedPlans.length}</span>
+        </button>
       </div>
 
       {isLoading ? (
         <p className="text-muted">Loading your plans...</p>
       ) : isError ? (
         <p className="text-red-500">Failed to load plans.</p>
-      ) : plans.length === 0 ? (
+      ) : currentPlans.length === 0 ? (
         <div className="rounded-xl border border-dashed border-line p-10 text-center">
-          <p className="text-muted">You haven't created any plans yet.</p>
+          <p className="text-muted">
+            {activeTab === "created" ? "You haven't created any plans yet."
+              : "You haven't joined any plans yet. Go explore and jump into one!"}
+          </p>
         </div>
       ) : (
         <>

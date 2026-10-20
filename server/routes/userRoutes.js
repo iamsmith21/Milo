@@ -14,7 +14,9 @@ router.get("/me/plans", verifyToken, async (req, res) => {
       orderBy: { createdAt: "desc" },
       include: {
         participants: {
-          user: true,
+          include: {
+            user: true
+          }
         },
       },
     });
@@ -24,5 +26,38 @@ router.get("/me/plans", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Failed to fetch user plans" });
   }
 });
+
+// To get Plans the user has joined 
+
+// GET /api/users/me/joined-plans
+
+router.get("/me/joined-plans", verifyToken, async (req, res) => {
+  try {
+    const id = req.user.userId
+
+    const userJoinedPlans = await prisma.plan.findMany({
+      where: {
+        participants: {
+          some: {
+            userId: id
+          }
+        }
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        participants: {
+          include: {
+            user: true
+          }
+        }
+      }
+    })
+
+    res.json(userJoinedPlans)
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch user joined plans." })
+  }
+})
+
 
 export default router;

@@ -7,6 +7,7 @@ export function usePlanActions(planId) {
   const invalidatePlans = () => {
     queryClient.invalidateQueries({ queryKey: ["plans"] });
     queryClient.invalidateQueries({ queryKey: ["userPlans"] });
+    queryClient.invalidateQueries({ queryKey: ["joinedPlans"] });
   };
 
   const joinMutation = useMutation({
