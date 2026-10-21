@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
+import { Plus, LogOut } from "lucide-react";
 
 const navLinks = [
   { to: "/", label: "Home", end: true },
@@ -42,39 +43,38 @@ export default function AppHeader() {
       }}
     >
       <div
-        className="pointer-events-auto flex w-full max-w-3xl items-center justify-between rounded-2xl px-5 py-4"
+        className="pointer-events-auto flex w-full max-w-4xl items-center justify-between rounded-full px-6 py-3"
         style={{
-          background: "rgba(253, 246, 238, 0.85)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
+          background: "rgba(253, 246, 238, 0.88)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
           boxShadow:
-            "0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.05)",
+            "0 4px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(232, 221, 208, 0.8)",
         }}
       >
         <Link
           to="/"
           aria-label="Milo home"
-          className="pl-1 text-2xl font-extrabold tracking-tight transition-opacity hover:opacity-70"
+          className="group flex items-center text-2xl font-black tracking-tight transition-transform hover:scale-105"
           style={{
             fontFamily: "var(--font-display)",
             color: "var(--color-green)",
           }}
         >
-          milo<span style={{ color: "var(--color-coral)" }}>.</span>
+          milo<span className="text-[#FF5E3A] transition-transform group-hover:scale-125">.</span>
         </Link>
 
-        <nav aria-label="Main navigation" className="flex items-center gap-1">
+        <nav aria-label="Main navigation" className="flex items-center gap-1.5">
           {navLinks.map(({ to, label, end }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
-              className="relative rounded-xl px-4 py-2 text-sm font-semibold transition-colors duration-150"
+              className="relative rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-200"
               style={({ isActive }) => ({
-                color: isActive ? "var(--color-green)" : "var(--color-muted)",
-                background: isActive
-                  ? "var(--color-green-subtle)"
-                  : "transparent",
+                color: isActive ? "white" : "var(--color-muted)",
+                background: isActive ? "var(--color-green)" : "transparent",
+                boxShadow: isActive ? "0 2px 8px rgba(45, 106, 79, 0.25)" : "none",
               })}
             >
               {label}
@@ -82,52 +82,47 @@ export default function AppHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 pr-1">
+        <div className="flex items-center gap-2.5">
           {user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <NavLink
-              to="/profilepage"
-                className="flex h-8 w-8 items-center justify-center rounded-xl text-xs font-bold text-white"
-                style={{ background: "var(--color-green)" }}
-                title={user.name}
+                to="/profilepage"
+                className="group relative flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-[#FF5E3A] to-[#6366F1] p-0.5 shadow-sm transition-transform hover:scale-105"
+                title={`${user.name}'s Dashboard`}
               >
-                {user.name?.charAt(0).toUpperCase()}
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-surface text-xs font-black text-ink">
+                  {user.name?.charAt(0).toUpperCase()}
+                </div>
               </NavLink>
 
               <NavLink
                 to="/create"
-                className="rounded-xl px-3.5 py-2 text-sm font-bold text-white transition-all hover:brightness-110"
-                style={{ background: "var(--color-coral)" }}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all hover:brightness-110 hover:shadow-md active:scale-95"
+                style={{ background: "#FF5E3A" }}
               >
-                + Plan
+                <Plus className="h-3.5 w-3.5" />
+                <span>New Plan</span>
               </NavLink>
 
               <button
                 onClick={handleLogout}
-                className="rounded-xl px-3 py-2 text-xs font-semibold transition-colors"
-                style={{ color: "var(--color-muted)" }}
-                onMouseEnter={(e) =>
-                  (e.target.style.color = "var(--color-coral)")
-                }
-                onMouseLeave={(e) =>
-                  (e.target.style.color = "var(--color-muted)")
-                }
+                className="flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-warm hover:text-red-500"
+                title="Log out"
               >
-                Out
+                <LogOut className="h-4 w-4" />
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <Link
                 to="/login"
-                className="rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
-                style={{ color: "var(--color-muted)" }}
+                className="rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-muted transition-colors hover:text-ink"
               >
                 Sign in
               </Link>
               <Link
                 to="/signup"
-                className="rounded-xl px-4 py-2 text-sm font-bold text-white transition-all hover:brightness-110"
+                className="rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all hover:brightness-110 active:scale-95"
                 style={{ background: "var(--color-green)" }}
               >
                 Join free

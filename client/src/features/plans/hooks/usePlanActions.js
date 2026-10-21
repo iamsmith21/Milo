@@ -8,6 +8,7 @@ export function usePlanActions(planId) {
     queryClient.invalidateQueries({ queryKey: ["plans"] });
     queryClient.invalidateQueries({ queryKey: ["userPlans"] });
     queryClient.invalidateQueries({ queryKey: ["joinedPlans"] });
+    queryClient.invalidateQueries({ queryKey: ["plan", String(planId)] });
   };
 
   const joinMutation = useMutation({

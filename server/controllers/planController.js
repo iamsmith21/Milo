@@ -26,8 +26,11 @@ export const getPlanById = async (req, res) => {
 
     const plan = await prisma.plan.findUnique({
       where: { id: Number(planId) },
-
       include: {
+        author: true,
+        participants: {
+          include: { user: true },
+        },
         messages: {
           include: { user: true },
           orderBy: { createdAt: "asc" },
@@ -46,10 +49,9 @@ export const getPlanById = async (req, res) => {
   }
 };
 
-// POST /api/plans
 export const createPlan = async (req, res) => {
   try {
-    const { title, location, capacity, category, time, date, description } =
+    const { title, location, capacity, category, time, date, description, coverImage } =
       req.body;
 
     const newPlan = await prisma.plan.create({
@@ -62,6 +64,12 @@ export const createPlan = async (req, res) => {
         time,
         date,
         description,
+        coverImage: coverImage ? String(coverImage).trim() : null,
+        participants: {
+          create: {
+            userId: req.user.userId,
+          },
+        },
       },
     });
 
@@ -72,14 +80,13 @@ export const createPlan = async (req, res) => {
   }
 };
 
-// PATCH /api/plans/:planId
 export const updatePlan = async (req, res) => {
   try {
     const { planId } = req.params;
 
     const updatedPlan = await prisma.plan.update({
       where: { id: Number(planId) },
-      data: req.body, // In a production app, we would validate this body first!
+      data: req.body,
     });
 
     res.json(updatedPlan);
@@ -111,6 +118,10 @@ export const deletePlan = async (req, res) => {
     }
 
     await prisma.message.deleteMany({
+      where: { planId: Number(planId) },
+    });
+
+    await prisma.planParticipant.deleteMany({
       where: { planId: Number(planId) },
     });
 

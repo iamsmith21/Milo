@@ -213,6 +213,7 @@ export default function LoginPage() {
                   <input
                     type="password"
                     id="password-input"
+                    aria-label="Password"
                     className="field w-full"
                     placeholder="••••••••••••"
                     value={password}

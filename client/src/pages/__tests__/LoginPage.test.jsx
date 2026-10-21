@@ -14,12 +14,11 @@ describe("Login Page", () => {
       </MemoryRouter>,
     );
 
-    const heading = screen.getByText("Welcome Back");
-
+    const heading = screen.getByText(/welcome back/i);
     expect(heading).toBeInTheDocument();
 
-    const email = screen.getByLabelText("Email");
-    const passwordInput = screen.getByLabelText("Password");
+    const email = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
 
     expect(email).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();

@@ -1,32 +1,32 @@
 const categories = [
-  { key: "all",    label: "All" },
-  { key: "sport",  label: "Sport" },
-  { key: "social", label: "Social" },
-  { key: "life",   label: "Life" },
+  { key: "all", label: "All Vibes", icon: "✨", color: "#10B981" },
+  { key: "sport", label: "Sport", icon: "🏀", color: "#FF5E3A" },
+  { key: "social", label: "Social", icon: "☕", color: "#6366F1" },
+  { key: "life", label: "Life", icon: "🌿", color: "#10B981" },
 ];
 
 export default function CategoryFilter({ selectedCategory, onCategoryChange }) {
   return (
-    <div className="mb-7 flex flex-wrap gap-2">
-      {categories.map(({ key, label }) => {
+    <div className="mb-8 flex flex-wrap items-center gap-2.5">
+      {categories.map(({ key, label, icon, color }) => {
         const isActive = selectedCategory === key;
         return (
           <button
             key={key}
             onClick={() => onCategoryChange(key)}
-            className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-all duration-150 ${
+            className={`group flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
               isActive
-                ? "text-white shadow-sm"
-                : "border border-line bg-surface text-muted hover:text-ink"
+                ? "text-white shadow-md scale-[1.03]"
+                : "border border-line bg-surface text-muted hover:text-ink hover:border-muted/50 hover:bg-surface-warm"
             }`}
             style={
               isActive
-                ? { background: "var(--color-green)" }
+                ? { background: color, borderColor: color }
                 : {}
             }
           >
-            {key !== "all" && <span className="cat-dot" data-cat={key} />}
-            {label}
+            <span className="text-sm leading-none transition-transform group-hover:scale-125">{icon}</span>
+            <span>{label}</span>
           </button>
         );
       })}
